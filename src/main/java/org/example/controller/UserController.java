@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping("/addNewUser")
-    public String addNewUser(Model model) {
+    public String getUserForm(Model model) {
 
         User user = new User();
         model.addAttribute("user", user);
@@ -49,16 +49,28 @@ public class UserController {
         }
         userService.saveUser(user);
         return "redirect:/";
+    }
+
+    @PostMapping("/updateUser")
+    public String updateUser(@Valid @ModelAttribute("user") User user,
+                           BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", bindingResult.getAllErrors());
+            return "user-info2";
+        }
+        userService.updateUser(user);
+        return "redirect:/";
 
     }
 
     @GetMapping("/updateInfo")
-    public String updateUser(@RequestParam("userId") int id, Model model) {
+    public String initUserForm(@RequestParam("userId") int id, Model model) {
 
         User user = userService.getUser(id);
         model.addAttribute("user", user);
 
-        return "user-info";
+        return "user-info2";
     }
 
     @PostMapping("/deleteUser")

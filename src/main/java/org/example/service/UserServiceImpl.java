@@ -4,8 +4,7 @@ import org.example.dao.UserDao;
 import org.example.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
@@ -18,7 +17,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         return userDao.getAllUsers();
     }
@@ -31,6 +30,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public void updateUser(User user) {
+        userDao.updateUser(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public User getUser(int id) {
         return userDao.getUser(id);
     }
